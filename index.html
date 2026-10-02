@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#0f0f1a" />
+<title>谁是卧底 · 5人同车版</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🕵️%3C/text%3E%3C/svg%3E" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #0b0b16;
+    --bg-2: #161628;
+    --bg-3: #1f1f38;
+    --fg: #f5f5fa;
+    --fg-muted: #a0a0b8;
+    --primary: #7c5cff;
+    --primary-glow: #9d83ff;
+    --danger: #ff5c7c;
+    --success: #5cff9d;
+    --warning: #ffc15c;
+    --border: rgba(255,255,255,0.08);
+  }
+  html, body {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+  }
+  body {
+    background:
+      radial-gradient(circle at 20% 0%, rgba(124,92,255,0.15), transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(255,92,124,0.10), transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  #app {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    padding-top: calc(16px + env(safe-area-inset-top));
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  h1, h2, h3, h4 { margin: 0 0 8px 0; font-weight: 700; }
+  h1 { font-size: 28px; }
+  h2 { font-size: 22px; }
+  h3 { font-size: 18px; }
+  p { margin: 0 0 12px 0; color: var(--fg-muted); }
+  button {
+    -webkit-appearance: none; appearance: none;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    min-height: 50px;
+    transition: transform 0.1s, background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(124,92,255,0.3);
+    font-family: inherit;
+  }
+  button:active { transform: scale(0.98); }
+  button:disabled {
+    background: var(--bg-3);
+    color: var(--fg-muted);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  button.secondary {
+    background: var(--bg-3);
+    color: var(--fg);
+    box-shadow: none;
+  }
+  button.danger { background: var(--danger); box-shadow: 0 4px 16px rgba(255,92,124,0.3); }
+  button.success { background: var(--success); color: #0a1f12; box-shadow: 0 4px 16px rgba(92,255,157,0.3); }
+  button.ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    box-shadow: none;
+  }
+  input[type="text"], input[type="number"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus { border-color: var(--primary); }
+  input::placeholder { color: var(--fg-muted); }
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .card.glow {
+    background: linear-gradient(135deg, rgba(124,92,255,0.15), rgba(255,92,124,0.10));
+    border-color: rgba(124,92,255,0.3);
+  }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .row > * { flex: 1; }
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--bg-3);
+    color: var(--fg-muted);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge.primary { background: var(--primary); color: white; }
+  .badge.danger { background: var(--danger); color: white; }
+  .badge.success { background: var(--success); color: #0a1f12; }
+  .stack { display: flex; flex-direction: column; gap: 10px; }
+  .center { text-align: center; }
+  .muted { color: var(--fg-muted); }
+  .small { font-size: 13px; }
+  .grow { flex: 1; }
+  .spacer { height: 14px; }
+  .hero {
+    text-align: center;
+    padding: 30px 12px 22px;
+  }
+  .hero .logo {
+    font-size: 64px;
+    line-height: 1;
+    margin-bottom: 12px;
+    display: inline-block;
+    filter: drop-shadow(0 0 24px rgba(124,92,255,0.5));
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .room-code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    text-align: center;
+    background: var(--bg-3);
+    border: 2px dashed var(--primary);
+    border-radius: 14px;
+    padding: 18px;
+    margin: 12px 0;
+    user-select: all;
+    -webkit-user-select: all;
+  }
+  .player-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .player-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--bg-3);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .player-item .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .player-item.you {
+    border-color: var(--primary);
+    background: linear-gradient(90deg, rgba(124,92,255,0.15), var(--bg-3));
+  }
+  .player-item.you .avatar { background: var(--success); color: #0a1f12; }
+  .player-item.host::after {
+    content: '房主';
+    margin-left: auto;
+    background: var(--warning);
+    color: #1f1200;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .word-reveal {
+    text-align: center;
+    padding: 30px 20px;
+  }
+  .word-reveal .label {
+    color: var(--fg-muted);
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  .word-reveal .word {
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-glow), var(--danger));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 12px 0;
+    letter-spacing: 4px;
+  }
+  .word-reveal .word.hidden::before {
+    content: '？';
+    color: var(--fg-muted);
+  }
+  .word-reveal .word.hidden .actual { display: none; }
+  .tap-cover {
+    background: var(--bg-3);
+    border: 2px dashed var(--border);
+    border-radius: 18px;
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--fg-muted);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tap-cover:active {
+    transform: scale(0.98);
+    border-color: var(--primary);
+    color: var(--fg);
+  }
+  .timer {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 48px;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary-glow), var(--danger));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 8px 0;
+  }
+  .timer.urgent {
+    animation: pulse 0.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+  }
+  .descriptions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+  .description-item {
+    padding: 12px 14px;
+    background: var(--bg-3);
+    border-radius: 10px;
+    border-left: 3px solid var(--primary);
+  }
+  .description-item .who {
+    color: var(--fg-muted);
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  .description-item .what {
+    color: var(--fg);
+    font-size: 16px;
+  }
+  .vote-option {
+    padding: 16px 18px;
+    background: var(--bg-3);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .vote-option:active { transform: scale(0.98); }
+  .vote-option.selected {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 0 20px rgba(124,92,255,0.5);
+  }
+  .vote-option.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .vote-count {
+    background: rgba(255,255,255,0.15);
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .vote-option:not(.selected) .vote-count {
+    background: var(--bg-2);
+    color: var(--fg-muted);
+  }
+  .result-card {
+    text-align: center;
+    padding: 24px 18px;
+  }
+  .result-card .emoji { font-size: 64px; margin-bottom: 12px; }
+  .result-card .title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .reveal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .reveal-item {
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .reveal-item.reg { background: rgba(92,255,157,0.1); border: 1px solid rgba(92,255,157,0.3); }
+  .reveal-item.spy { background: rgba(255,92,124,0.1); border: 1px solid rgba(255,92,124,0.3); }
+  .reveal-item .role { font-size: 11px; margin-bottom: 2px; }
+  .reveal-item.reg .role { color: var(--success); }
+  .reveal-item.spy .role { color: var(--danger); }
+  .reveal-item .word { font-size: 18px; font-weight: 700; }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--bg-3);
+    font-size: 12px;
+    color: var(--fg-muted);
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--warning);
+    animation: blink 1s infinite;
+  }
+  .status-dot.connected { background: var(--success); }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    min-height: 32px;
+  }
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    background: var(--bg-3);
+    color: var(--fg);
+    padding: 12px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    z-index: 100;
+    animation: slideUp 0.3s ease-out;
+    max-width: 90vw;
+    text-align: center;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  .empty-slot {
+    border: 1px dashed var(--border);
+    background: transparent;
+    color: var(--fg-muted);
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 20px;
+  }
+  .modal {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+  }
+  .share-link {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px 0;
+    word-break: break-all;
+    font-size: 13px;
+    color: var(--primary-glow);
+  }
+  .avatar-emoji {
+    font-size: 22px;
+  }
+  .turn-indicator {
+    text-align: center;
+    padding: 14px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(124,92,255,0.2), rgba(255,92,124,0.15));
+    border: 1px solid rgba(124,92,255,0.3);
+    margin-bottom: 12px;
+  }
+  .turn-indicator.you {
+    background: linear-gradient(135deg, rgba(92,255,157,0.2), rgba(92,255,157,0.1));
+    border-color: rgba(92,255,157,0.4);
+  }
+  .footer-note {
+    text-align: center;
+    color: var(--fg-muted);
+    font-size: 12px;
+    margin-top: 24px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .kbd {
+    display: inline-block;
+    padding: 2px 6px;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+  }
+  textarea {
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+  }
+  textarea:focus { border-color: var(--primary); }
+  .phase-banner {
+    text-align: center;
+    padding: 10px;
+    background: var(--bg-3);
+    border-radius: 10px;
+    margin-bottom: 14px;
+    color: var(--fg-muted);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .round-num {
+    text-align: center;
+    color: var(--fg-muted);
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast-container"></div>
+
+<script type="module">
+import * as Y from 'https://esm.sh/yjs@13.6.18';
+import { WebrtcProvider } from 'https://esm.sh/y-webrtc@10.3.0';
+
+// ============================================================
+// WORD PAIRS (similar but not identical — the spy gets one, others get the other)
+// ============================================================
+const WORD_PAIRS = [
+  ['火车', '马车'],
+  ['苹果', '梨'],
+  ['猫咪', '老虎'],
+  ['手机', '电话'],
+  ['电影', '电视剧'],
+  ['咖啡', '茶'],
+  ['钢琴', '吉他'],
+  ['医生', '护士'],
+  ['飞机', '直升机'],
+  ['太阳', '月亮'],
+  ['春节', '元宵节'],
+  ['饺子', '包子'],
+  ['火锅', '烧烤'],
+  ['篮球', '足球'],
+  ['眼镜', '墨镜'],
+  ['围巾', '领带'],
+  ['雪糕', '冰棒'],
+  ['可乐', '雪碧'],
+  ['玫瑰', '月季'],
+  ['大海', '湖泊'],
+  ['老师', '教授'],
+  ['医院', '诊所'],
+  ['酒店', '旅馆'],
+  ['超市', '商场'],
+  ['书店', '图书馆'],
+  ['电梯', '扶梯'],
+  ['牙刷', '牙膏'],
+  ['枕头', '靠垫'],
+  ['钥匙', '锁'],
+  ['镜子', '玻璃'],
+  ['筷子', '叉子'],
+  ['米饭', '面条'],
+  ['牛奶', '豆浆'],
+  ['西瓜', '哈密瓜'],
+  ['爸爸', '妈妈'],
+  ['哥哥', '姐姐'],
+  ['老师', '校长'],
+  ['警察', '保安'],
+  ['作家', '编剧'],
+  ['厨师', '服务员'],
+  ['画家', '设计师'],
+  ['记者', '主播'],
+  ['诗人', '作家'],
+  ['歌手', '演员'],
+  ['导演', '编剧'],
+  ['外卖', '快递'],
+  ['高铁', '地铁'],
+  ['轮船', '游艇'],
+  ['单车', '摩托'],
+  ['绿灯', '红灯'],
+  ['春天', '秋天']
+];
+
+const AVATAR_EMOJIS = ['🐱','🐶','🐼','🦊','🐯','🐸','🐵','🐰','🐨','🐮','🦁','🐷','🐔','🐧','🐢','🦄'];
+
+// ============================================================
+// STATE
+// ============================================================
+const STORAGE_KEY = 'who-is-spy-v1';
+const NAME_KEY = 'who-is-spy-name';
+const PEER_ID_KEY = 'who-is-spy-peerid';
+
+function loadPlayer() {
+  let name = localStorage.getItem(NAME_KEY);
+  let peerId = localStorage.getItem(PEER_ID_KEY);
+  if (!name) {
+    name = '玩家' + Math.floor(Math.random() * 9000 + 1000);
+    localStorage.setItem(NAME_KEY, name);
+  }
+  if (!peerId) {
+    peerId = 'spy-' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+    localStorage.setItem(PEER_ID_KEY, peerId);
+  }
+  return { name, peerId };
+}
+
+const player = loadPlayer();
+
+// Initial empty state shape:
+function emptyRoomState() {
+  return {
+    phase: 'lobby', // lobby | reveal | describe | vote | reveal-result | ended
+    hostId: null,
+    players: {}, // peerId -> { name, joinedAt, alive }
+    round: 0,
+    spyCount: 1,
+    wordPair: null, // { regular, spy, index }
+    assignments: {}, // peerId -> { word, role }
+    turnIndex: 0,
+    turnOrder: [], // peerId list
+    descriptions: {}, // peerId -> string
+    votes: {}, // voterId -> targetId
+    eliminated: [], // list of peerIds eliminated this game
+    wordRevealed: {}, // peerId -> bool
+    descriptionReady: {}, // peerId -> bool (for current round, after submitting desc)
+    spyGuess: '', // if spy guesses the word at end
+    lastEliminated: null, // peerId
+    config: {
+      descriptionSeconds: 30,
+      voteSeconds: 20
+    }
+  };
+}
+
+// ============================================================
+// YJS DOC / PROVIDER
+// ============================================================
+let doc = null;
+let provider = null;
+let yState = null; // Y.Map
+let myRoomId = null;
+
+function ensureDoc(roomId) {
+  if (doc && myRoomId === roomId) return;
+  if (doc) { try { doc.destroy(); } catch(e){} }
+  if (provider) { try { provider.destroy(); } catch(e){} }
+
+  doc = new Y.Doc();
+  yState = doc.getMap('state');
+  myRoomId = roomId;
+
+  // Use public y-webrtc signaling
+  provider = new WebrtcProvider('whois-spy-' + roomId, doc, {
+    signaling: [
+      'wss://signaling.yjs.dev',
+      'wss://y-webrtc-signaling-eu.herokuapp.com',
+      'wss://y-webrtc-signaling-us.herokuapp.com'
+    ],
+    maxConns: 20,
+    filterBcConns: true
+  });
+
+  // Set up initial state if empty
+  doc.transact(() => {
+    if (!yState.has('phase')) {
+      const init = emptyRoomState();
+      for (const [k, v] of Object.entries(init)) {
+        yState.set(k, v);
+      }
+    }
+    // Register this player
+    const players = yState.get('players') || {};
+    if (!players[player.peerId]) {
+      players[player.peerId] = {
+        name: player.name,
+        joinedAt: Date.now(),
+        alive: true
+      };
+      yState.set('players', players);
+    }
+    // Set host if none
+    if (!yState.get('hostId')) {
+      yState.set('hostId', player.peerId);
+    }
+  });
+
+  // Awareness: track who's connected
+  provider.awareness.setLocalStateField('player', {
+    name: player.name,
+    peerId: player.peerId
+  });
+
+  provider.on('peers', () => {
+    render();
+  });
+  yState.observeDeep(() => {
+    render();
+  });
+}
+
+function readState() {
+  if (!yState) return null;
+  const out = {};
+  for (const [k, v] of yState.entries()) {
+    out[k] = v;
+  }
+  return out;
+}
+
+// ============================================================
+// ROUTING / VIEWS
+// ============================================================
+let currentView = 'home'; // home | lobby | game
+let toastTimer = null;
+
+function showToast(msg, ms = 2200) {
+  const container = document.getElementById('toast-container');
+  container.innerHTML = `<div class="toast">${msg}</div>`;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { container.innerHTML = ''; }, ms);
+}
+
+function setView(v) {
+  currentView = v;
+  render();
+}
+
+function render() {
+  const app = document.getElementById('app');
+  if (!currentView || currentView === 'home') {
+    app.innerHTML = renderHome();
+    bindHome();
+    return;
+  }
+  const state = readState();
+  if (!state) { app.innerHTML = '<p class="muted center">连接中...</p>'; return; }
+  if (currentView === 'lobby') {
+    app.innerHTML = renderLobby(state);
+    bindLobby(state);
+  } else if (currentView === 'game') {
+    app.innerHTML = renderGame(state);
+    bindGame(state);
+  }
+}
+
+// ============================================================
+// HOME VIEW
+// ============================================================
+function renderHome() {
+  return `
+    <div class="hero">
+      <div class="logo">🕵️</div>
+      <h1>谁是卧底</h1>
+      <p class="muted">5人同车版 · 开车也能玩</p>
+    </div>
+    <div class="card glow">
+      <h3>你的昵称</h3>
+      <input type="text" id="name-input" value="${escapeHtml(player.name)}" maxlength="12" />
+    </div>
+    <div class="stack">
+      <button id="create-btn">🚗 创建房间</button>
+    </div>
+    <div class="spacer"></div>
+    <div class="card">
+      <h3>加入房间</h3>
+      <p class="small muted">输入朋友分享的 4 位房间号</p>
+      <div class="row">
+        <input type="text" id="room-input" placeholder="4 位房间号" maxlength="4" inputmode="numeric" pattern="[0-9A-Za-z]*" />
+        <button id="join-btn" class="secondary" style="flex: 0 0 100px;">加入</button>
+      </div>
+    </div>
+    <div class="footer-note">
+      通过浏览器实时联网 · 5 人同车最合适
+    </div>
+  `;
+}
+
+function bindHome() {
+  const nameInput = document.getElementById('name-input');
+  nameInput.addEventListener('change', () => {
+    const v = nameInput.value.trim().slice(0, 12);
+    if (v) {
+      player.name = v;
+      localStorage.setItem(NAME_KEY, v);
+    }
+  });
+  const roomInput = document.getElementById('room-input');
+  roomInput.addEventListener('input', () => {
+    roomInput.value = roomInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  });
+  document.getElementById('create-btn').addEventListener('click', () => {
+    const code = generateRoomCode();
+    joinRoom(code);
+  });
+  document.getElementById('join-btn').addEventListener('click', () => {
+    const code = roomInput.value.trim().toUpperCase();
+    if (code.length !== 4) {
+      showToast('请输入 4 位房间号');
+      return;
+    }
+    joinRoom(code);
+  });
+  roomInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('join-btn').click();
+  });
+}
+
+function generateRoomCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return code;
+}
+
+function joinRoom(code) {
+  ensureDoc(code);
+  setView('lobby');
+}
+
+// ============================================================
+// LOBBY VIEW
+// ============================================================
+function renderLobby(state) {
+  const players = Object.entries(state.players || {});
+  const isHost = state.hostId === player.peerId;
+  const myId = player.peerId;
+  const connected = provider ? Array.from(provider.awareness.getStates().keys()).filter(k => k !== provider.awareness.clientID) : [];
+  const totalConnected = (provider ? 1 : 0) + connected.length;
+
+  let playerList = '';
+  for (let i = 0; i < 5; i++) {
+    const p = players[i];
+    if (p) {
+      const [peerId, info] = p;
+      const emoji = AVATAR_EMOJIS[i % AVATAR_EMOJIS.length];
+      const isYou = peerId === myId;
+      playerList += `
+        <div class="player-item ${isYou ? 'you' : ''} ${peerId === state.hostId ? 'host' : ''}">
+          <div class="avatar"><span class="avatar-emoji">${emoji}</span></div>
+          <div class="grow">${escapeHtml(info.name)}${isYou ? ' (你)' : ''}</div>
+        </div>
+      `;
+    } else {
+      playerList += `<div class="empty-slot">等待第 ${i+1} 位玩家加入...</div>`;
+    }
+  }
+
+  const canStart = players.length === 5 && isHost;
+
+  return `
+    <div class="toolbar">
+      <button class="ghost" id="leave-btn" style="width: auto; padding: 8px 14px; min-height: 0; font-size: 13px;">← 退出</button>
+      <div class="status-pill">
+        <span class="status-dot ${totalConnected >= 2 ? 'connected' : ''}"></span>
+        ${totalConnected} 人在线
+      </div>
+    </div>
+    <div class="card glow center">
+      <p class="small muted" style="margin-bottom: 4px;">房间号</p>
+      <div class="room-code">${myRoomId}</div>
+      <button class="secondary small" id="share-btn" style="min-height: 38px; font-size: 13px;">📤 分享房间链接</button>
+    </div>
+    <div class="card">
+      <h3>玩家 (${players.length}/5)</h3>
+      <div class="player-list">${playerList}</div>
+    </div>
+    ${isHost ? `
+      <button id="start-btn" ${canStart ? '' : 'disabled'}>
+        ${players.length === 5 ? '🚀 开始游戏' : `还差 ${5 - players.length} 人`}
+      </button>
+    ` : `
+      <p class="muted center">等待房主开始游戏...</p>
+    `}
+    <div class="footer-note small">
+      提示：把房间号或链接发给朋友，让他们点"加入房间"输入即可
+    </div>
+  `;
+}
+
+function bindLobby(state) {
+  document.getElementById('leave-btn').addEventListener('click', () => {
+    leaveRoom();
+  });
+  document.getElementById('share-btn').addEventListener('click', () => {
+    const link = location.origin + location.pathname + '?room=' + myRoomId;
+    if (navigator.share) {
+      navigator.share({
+        title: '谁是卧底',
+        text: `加入我的房间 ${myRoomId} 一起玩谁是卧底！`,
+        url: link
+      }).catch(() => {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(link).then(() => showToast('链接已复制'));
+    } else {
+      showToast('房间号：' + myRoomId);
+    }
+  });
+  const startBtn = document.getElementById('start-btn');
+  if (startBtn) {
+    startBtn.addEventListener('click', () => {
+      startGame();
+    });
+  }
+}
+
+function leaveRoom() {
+  if (provider) { try { provider.destroy(); } catch(e){} provider = null; }
+  if (doc) { try { doc.destroy(); } catch(e){} doc = null; }
+  yState = null;
+  myRoomId = null;
+  setView('home');
+}
+
+// ============================================================
+// GAME LOGIC
+// ============================================================
+function startGame() {
+  if (!yState) return;
+  const players = Object.keys(yState.get('players') || {});
+  if (players.length !== 5) {
+    showToast('需要 5 位玩家才能开始');
+    return;
+  }
+  // Pick a random word pair
+  const idx = Math.floor(Math.random() * WORD_PAIRS.length);
+  const [regular, spy] = WORD_PAIRS[idx];
+  // Random which side is the spy
+  const spyWord = Math.random() < 0.5 ? spy : regular;
+  const regularWord = spyWord === spy ? (spy === regular ? regular : spy) : regular;
+  const finalRegular = spyWord === spy ? (regular === spy ? spy : regular) : regular;
+
+  // Pick spy randomly
+  const shuffled = [...players].sort(() => Math.random() - 0.5);
+  const spyIds = [shuffled[0]];
+  const assignments = {};
+  for (const pid of players) {
+    assignments[pid] = {
+      word: spyIds.includes(pid) ? spyWord : finalRegular,
+      role: spyIds.includes(pid) ? 'spy' : 'reg'
+    };
+  }
+
+  // Reset turn order to alive players
+  const turnOrder = [...players];
+
+  doc.transact(() => {
+    yState.set('phase', 'reveal');
+    yState.set('round', 1);
+    yState.set('wordPair', { regular: finalRegular, spy: spyWord, index: idx });
+    yState.set('assignments', assignments);
+    yState.set('turnOrder', turnOrder);
+    yState.set('turnIndex', 0);
+    yState.set('descriptions', {});
+    yState.set('votes', {});
+    yState.set('eliminated', []);
+    yState.set('wordRevealed', {});
+    yState.set('descriptionReady', {});
+    yState.set('lastEliminated', null);
+    yState.set('spyGuess', '');
+  });
+
+  setView('game');
+}
+
+function nextPhase() {
+  const state = readState();
+  const phase = state.phase;
+  if (phase === 'describe') {
+    // Move to vote
+    doc.transact(() => {
+      yState.set('phase', 'vote');
+      yState.set('votes', {});
+    });
+  } else if (phase === 'vote') {
+    // Tally votes, eliminate
+    const votes = state.votes || {};
+    const counts = {};
+    for (const target of Object.values(votes)) {
+      counts[target] = (counts[target] || 0) + 1;
+    }
+    // Find max
+    let maxCount = 0;
+    let topIds = [];
+    for (const [id, c] of Object.entries(counts)) {
+      if (c > maxCount) { maxCount = c; topIds = [id]; }
+      else if (c === maxCount) { topIds.push(id); }
+    }
+    let eliminated = null;
+    if (topIds.length === 1) {
+      eliminated = topIds[0];
+    } else {
+      // Tie: pick randomly among tied
+      eliminated = topIds[Math.floor(Math.random() * topIds.length)];
+    }
+
+    const newEliminated = [...(state.eliminated || []), eliminated];
+    doc.transact(() => {
+      yState.set('lastEliminated', eliminated);
+      yState.set('eliminated', newEliminated);
+      yState.set('phase', 'reveal-result');
+    });
+  } else if (phase === 'reveal-result') {
+    // Check end condition
+    const state2 = readState();
+    const lastId = state2.lastEliminated;
+    const assignments = state2.assignments || {};
+    const eliminated = state2.eliminated || [];
+    const alivePlayers = Object.keys(state2.players).filter(p => !eliminated.includes(p));
+
+    // Count spies among alive
+    const aliveSpies = alivePlayers.filter(p => assignments[p]?.role === 'spy');
+
+    if (assignments[lastId]?.role === 'spy') {
+      // Spy caught — regulars win
+      doc.transact(() => yState.set('phase', 'ended'));
+      return;
+    }
+    if (aliveSpies.length === 0) {
+      // No spies left (shouldn't happen with 1 spy, but just in case)
+      doc.transact(() => yState.set('phase', 'ended'));
+      return;
+    }
+    // Continue: next round
+    const aliveCount = alivePlayers.length;
+    if (aliveCount < 3) {
+      // Not enough players
+      doc.transact(() => yState.set('phase', 'ended'));
+      return;
+    }
+    const nextRound = (state2.round || 1) + 1;
+    doc.transact(() => {
+      yState.set('phase', 'describe');
+      yState.set('round', nextRound);
+      yState.set('turnOrder', alivePlayers);
+      yState.set('turnIndex', 0);
+      yState.set('descriptions', {});
+      yState.set('votes', {});
+      yState.set('descriptionReady', {});
+    });
+  }
+}
+
+// ============================================================
+// GAME VIEW
+// ============================================================
+function renderGame(state) {
+  const phase = state.phase;
+  const myId = player.peerId;
+  const myAssignment = (state.assignments || {})[myId];
+  const eliminated = state.eliminated || [];
+  const isEliminated = eliminated.includes(myId);
+
+  let body = '';
+  switch (phase) {
+    case 'reveal':
+      body = renderRevealPhase(state, myAssignment, isEliminated);
+      break;
+    case 'describe':
+      body = renderDescribePhase(state, myAssignment, isEliminated);
+      break;
+    case 'vote':
+      body = renderVotePhase(state, myAssignment, isEliminated);
+      break;
+    case 'reveal-result':
+      body = renderResultPhase(state, myAssignment, isEliminated);
+      break;
+    case 'ended':
+      body = renderEndPhase(state, myAssignment, isEliminated);
+      break;
+    default:
+      body = '<p class="muted center">未知阶段</p>';
+  }
+
+  return `
+    <div class="toolbar">
+      <button class="ghost" id="leave-btn" style="width: auto; padding: 8px 14px; min-height: 0; font-size: 13px;">← 退出</button>
+      <div class="round-num">第 ${state.round || 1} 轮 · ${phaseLabel(phase)}</div>
+      <div style="width: 60px;"></div>
+    </div>
+    ${body}
+  `;
+}
+
+function phaseLabel(p) {
+  return {
+    'reveal': '看词',
+    'describe': '描述',
+    'vote': '投票',
+    'reveal-result': '结果',
+    'ended': '结束'
+  }[p] || p;
+}
+
+function bindGame(state) {
+  document.getElementById('leave-btn').addEventListener('click', () => {
+    if (confirm('确定退出当前游戏？')) leaveRoom();
+  });
+
+  const phase = state.phase;
+  if (phase === 'reveal') {
+    const cover = document.getElementById('word-cover');
+    if (cover) {
+      cover.addEventListener('click', () => {
+        doc.transact(() => {
+          const wr = yState.get('wordRevealed') || {};
+          wr[player.peerId] = true;
+          yState.set('wordRevealed', wr);
+        });
+      });
+    }
+    const readyBtn = document.getElementById('ready-btn');
+    if (readyBtn) {
+      readyBtn.addEventListener('click', () => {
+        // For simplicity, when ready, mark description-ready (means they're ready to start describing)
+        doc.transact(() => {
+          const dr = yState.get('descriptionReady') || {};
+          dr[player.peerId] = true;
+          yState.set('descriptionReady', dr);
+        });
+        // Check if all revealed and ready
+        maybeStartDescribe();
+      });
+    }
+  } else if (phase === 'describe') {
+    const submitBtn = document.getElementById('submit-desc-btn');
+    const descInput = document.getElementById('desc-input');
+    if (submitBtn && descInput) {
+      submitBtn.addEventListener('click', () => {
+        const text = descInput.value.trim();
+        if (!text) {
+          showToast('请输入描述');
+          return;
+        }
+        doc.transact(() => {
+          const descs = yState.get('descriptions') || {};
+          descs[player.peerId] = text;
+          yState.set('descriptions', descs);
+          const dr = yState.get('descriptionReady') || {};
+          dr[player.peerId] = true;
+          yState.set('descriptionReady', dr);
+        });
+        maybeAdvanceDescribe();
+      });
+    }
+    const skipBtn = document.getElementById('skip-btn');
+    if (skipBtn) {
+      skipBtn.addEventListener('click', () => {
+        doc.transact(() => {
+          const descs = yState.get('descriptions') || {};
+          descs[player.peerId] = '(跳过)';
+          yState.set('descriptions', descs);
+          const dr = yState.get('descriptionReady') || {};
+          dr[player.peerId] = true;
+          yState.set('descriptionReady', dr);
+        });
+        maybeAdvanceDescribe();
+      });
+    }
+  } else if (phase === 'vote') {
+    const voteBtns = document.querySelectorAll('.vote-option');
+    voteBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('disabled')) return;
+        if (btn.classList.contains('selected')) return;
+        const target = btn.dataset.target;
+        doc.transact(() => {
+          const votes = yState.get('votes') || {};
+          votes[player.peerId] = target;
+          yState.set('votes', votes);
+        });
+        maybeAdvanceVote();
+      });
+    });
+  } else if (phase === 'reveal-result') {
+    const nextBtn = document.getElementById('next-round-btn');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        nextPhase();
+      });
+    }
+  } else if (phase === 'ended') {
+    const replayBtn = document.getElementById('replay-btn');
+    if (replayBtn) {
+      replayBtn.addEventListener('click', () => {
+        if (state.hostId === player.peerId) {
+          startGame();
+        } else {
+          showToast('只有房主可以重新开始');
+        }
+      });
+    }
+    const lobbyBtn = document.getElementById('back-lobby-btn');
+    if (lobbyBtn) {
+      lobbyBtn.addEventListener('click', () => {
+        if (state.hostId === player.peerId) {
+          doc.transact(() => {
+            yState.set('phase', 'lobby');
+            yState.set('assignments', {});
+            yState.set('descriptions', {});
+            yState.set('votes', {});
+            yState.set('eliminated', []);
+            yState.set('descriptionReady', {});
+            yState.set('wordRevealed', {});
+            yState.set('lastEliminated', null);
+          });
+          setView('lobby');
+        } else {
+          showToast('只有房主可以重置房间');
+        }
+      });
+    }
+  }
+}
+
+function maybeStartDescribe() {
+  const state = readState();
+  const players = Object.keys(state.players || {});
+  const wr = state.wordRevealed || {};
+  const allRevealed = players.every(p => wr[p]);
+  if (allRevealed && state.phase === 'reveal') {
+    doc.transact(() => {
+      yState.set('phase', 'describe');
+      yState.set('descriptions', {});
+      yState.set('descriptionReady', {});
+    });
+  }
+}
+
+function maybeAdvanceDescribe() {
+  const state = readState();
+  const players = Object.keys(state.players || {});
+  const eliminated = state.eliminated || [];
+  const alive = players.filter(p => !eliminated.includes(p));
+  const descriptions = state.descriptions || {};
+  const allDone = alive.every(p => descriptions[p] !== undefined);
+  if (allDone && state.phase === 'describe') {
+    nextPhase();
+  }
+}
+
+function maybeAdvanceVote() {
+  const state = readState();
+  const players = Object.keys(state.players || {});
+  const eliminated = state.eliminated || [];
+  const alive = players.filter(p => !eliminated.includes(p));
+  const votes = state.votes || {};
+  const allVoted = alive.every(p => votes[p] !== undefined);
+  if (allVoted && state.phase === 'vote') {
+    nextPhase();
+  }
+}
+
+function renderRevealPhase(state, myAssignment, isEliminated) {
+  if (isEliminated) {
+    return `<div class="card center">
+      <h3>你已被淘汰</h3>
+      <p class="muted">请等待本局结束</p>
+    </div>`;
+  }
+  if (!myAssignment) {
+    return `<div class="card center"><p class="muted">正在分配词语...</p></div>`;
+  }
+  const wr = state.wordRevealed || {};
+  const hasRevealed = wr[player.peerId];
+  const dr = state.descriptionReady || {};
+  const isReady = dr[player.peerId];
+
+  const readyCount = Object.keys(state.players || {}).filter(p => wr[p]).length;
+  const totalCount = Object.keys(state.players || {}).length;
+
+  return `
+    <div class="card glow center">
+      <p class="small muted">你的词语（只有你能看到）</p>
+      ${hasRevealed ? `
+        <div class="word-reveal">
+          <div class="word">${escapeHtml(myAssignment.word)}</div>
+          <p class="small muted">记住这个词，描述时不能直接说出来</p>
+        </div>
+      ` : `
+        <div class="tap-cover" id="word-cover">
+          👆 点击查看你的词语
+        </div>
+      `}
+    </div>
+    ${hasRevealed ? `
+      <button id="ready-btn" class="success" ${isReady ? 'disabled' : ''}>
+        ${isReady ? '✓ 已准备' : '我记住了，开始游戏'}
+      </button>
+    ` : ''}
+    <div class="card">
+      <h3>准备状态</h3>
+      <p class="small muted">${readyCount} / ${totalCount} 人已查看词语</p>
+    </div>
+  `;
+}
+
+function renderDescribePhase(state, myAssignment, isEliminated) {
+  const descriptions = state.descriptions || {};
+  const players = state.players || {};
+  const eliminated = state.eliminated || [];
+  const myId = player.peerId;
+  const myDesc = descriptions[myId];
+
+  // Order of submission: track submission order so we can show "next to speak" hint
+  const submittedOrder = Object.keys(descriptions).filter(pid => descriptions[pid] !== undefined);
+  const aliveOrder = Object.keys(players).filter(pid => !eliminated.includes(pid));
+  const remaining = aliveOrder.filter(pid => descriptions[pid] === undefined);
+  const nextToSpeak = remaining[0];
+
+  let body = '';
+  if (isEliminated) {
+    body = `<div class="card center">
+      <h3>你已被淘汰</h3>
+      <p class="muted">旁观中...</p>
+    </div>`;
+  } else if (myDesc !== undefined) {
+    body = `<div class="card center">
+      <h3>✓ 已提交</h3>
+      <p class="muted">等待其他玩家描述...</p>
+      <p class="small muted">提交顺序：${submittedOrder.length} / ${aliveOrder.length}</p>
+    </div>`;
+  } else {
+    const nextName = nextToSpeak ? players[nextToSpeak]?.name : null;
+    const isNext = nextToSpeak === myId;
+    body = `<div class="card glow">
+      <div class="turn-indicator ${isNext ? 'you' : ''}">
+        ${isNext ? '🎤 轮到你描述' : `⏳ 轮到 ${escapeHtml(nextName || '下一位')}`}
+      </div>
+      <p class="small muted">用一句话描述你拿到的词，不要直接说出来</p>
+      <textarea id="desc-input" placeholder="例如：这个东西在夏天很受欢迎..." maxlength="60"></textarea>
+      <div class="spacer"></div>
+      <button id="submit-desc-btn">提交描述</button>
+      <div class="spacer"></div>
+      <button id="skip-btn" class="ghost">跳过</button>
+    </div>`;
+  }
+
+  // Show descriptions so far
+  let descList = '';
+  if (submittedOrder.length > 0) {
+    for (const pid of submittedOrder) {
+      const info = players[pid] || { name: '???' };
+      descList += `
+        <div class="description-item">
+          <div class="who">${escapeHtml(info.name)}</div>
+          <div class="what">${escapeHtml(descriptions[pid])}</div>
+        </div>
+      `;
+    }
+  }
+
+  return `
+    ${body}
+    ${descList ? `
+      <div class="card">
+        <h3>本轮描述 (${submittedOrder.length}/${aliveOrder.length})</h3>
+        <div class="descriptions">${descList}</div>
+      </div>
+    ` : ''}
+  `;
+}
+
+function renderVotePhase(state, myAssignment, isEliminated) {
+  const players = state.players || {};
+  const eliminated = state.eliminated || [];
+  const alive = Object.entries(players).filter(([id]) => !eliminated.includes(id));
+  const votes = state.votes || {};
+  const myVote = votes[player.peerId];
+  const myId = player.peerId;
+  const allVoted = alive.every(([id]) => votes[id] !== undefined);
+
+  // Count votes for display
+  const counts = {};
+  for (const t of Object.values(votes)) counts[t] = (counts[t] || 0) + 1;
+
+  let body = '';
+  if (isEliminated) {
+    body = `<div class="card center">
+      <h3>你已被淘汰</h3>
+      <p class="muted">旁观中...</p>
+    </div>`;
+  } else if (myVote !== undefined) {
+    body = `<div class="card center">
+      <h3>✓ 已投票</h3>
+      <p class="muted">等待其他玩家...</p>
+    </div>`;
+  } else {
+    body = `<div class="card glow">
+      <h3>投票选出卧底</h3>
+      <p class="small muted">你觉得谁是卧底？</p>
+      <div class="stack" id="vote-list">
+        ${alive.filter(([id]) => id !== myId).map(([id, info]) => `
+          <div class="vote-option" data-target="${id}">
+            <span>${escapeHtml(info.name)}</span>
+            <span class="vote-count">0</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Show current standings
+  let standings = '';
+  if (Object.keys(votes).length > 0) {
+    standings = `<div class="card">
+      <h3>当前票数</h3>
+      <div class="stack">
+        ${alive.map(([id, info]) => `
+          <div class="vote-option ${votes[myId] === id ? 'selected' : ''}">
+            <span>${escapeHtml(info.name)}</span>
+            <span class="vote-count">${counts[id] || 0}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+
+  return body + standings;
+}
+
+// Bug fix: removed stray paren that was here
+
+function renderResultPhase(state, myAssignment, isEliminated) {
+  const players = state.players || {};
+  const eliminatedId = state.lastEliminated;
+  const eliminatedInfo = players[eliminatedId] || { name: '???' };
+  const assignments = state.assignments || {};
+  const eliminatedAssignment = assignments[eliminatedId];
+
+  const isHost = state.hostId === player.peerId;
+
+  // Show vote counts
+  const votes = state.votes || {};
+  const counts = {};
+  for (const t of Object.values(votes)) counts[t] = (counts[t] || 0) + 1;
+
+  return `
+    <div class="card glow result-card">
+      <div class="emoji">${eliminatedAssignment?.role === 'spy' ? '🎉' : '😱'}</div>
+      <div class="title">${escapeHtml(eliminatedInfo.name)} 被投出</div>
+      <p class="muted">${eliminatedAssignment?.role === 'spy' ? '是卧底！' : '不是卧底...'}</p>
+      ${eliminatedAssignment ? `<p class="small">TA 的词语：<b>${escapeHtml(eliminatedAssignment.word)}</b></p>` : ''}
+    </div>
+    <div class="card">
+      <h3>投票结果</h3>
+      <div class="stack">
+        ${Object.entries(players).map(([id, info]) => `
+          <div class="vote-option ${id === eliminatedId ? 'selected' : ''}">
+            <span>${escapeHtml(info.name)}${id === state.hostId ? ' 👑' : ''}${id === player.peerId ? ' (你)' : ''}</span>
+            <span class="vote-count">${counts[id] || 0} 票</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    ${isHost ? `
+      <button id="next-round-btn">继续下一轮</button>
+    ` : `
+      <p class="muted center">等待房主继续...</p>
+    `}
+  `;
+}
+
+function renderEndPhase(state, myAssignment, isEliminated) {
+  const players = state.players || {};
+  const assignments = state.assignments || {};
+  const wordPair = state.wordPair || {};
+  const eliminated = state.eliminated || [];
+  const spies = Object.entries(assignments).filter(([, a]) => a.role === 'spy').map(([id]) => id);
+  const regularsWin = spies.some(id => eliminated.includes(id));
+
+  // Build reveal grid
+  const revealItems = Object.entries(players).map(([id, info]) => {
+    const a = assignments[id];
+    return `
+      <div class="reveal-item ${a?.role || 'reg'}">
+        <div class="role">${a?.role === 'spy' ? '🕵️ 卧底' : '平民'}</div>
+        <div class="word">${escapeHtml(a?.word || '?')}</div>
+        <div class="small muted">${escapeHtml(info.name)}</div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="card glow result-card">
+      <div class="emoji">${regularsWin ? '🎊' : '🕵️'}</div>
+      <div class="title">${regularsWin ? '平民胜利！' : '卧底胜利！'}</div>
+      <p class="muted">${regularsWin ? '卧底被找出来了' : '卧底成功潜伏到最后'}</p>
+    </div>
+    <div class="card">
+      <h3>词语揭晓</h3>
+      <div class="reveal-grid">${revealItems}</div>
+      <p class="small muted center">平民词：<b>${escapeHtml(wordPair.regular)}</b> · 卧底词：<b>${escapeHtml(wordPair.spy)}</b></p>
+    </div>
+    <div class="row">
+      <button id="back-lobby-btn" class="secondary">返回大厅</button>
+      <button id="replay-btn">再来一局</button>
+    </div>
+  `;
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+// ============================================================
+// URL HANDLING
+// ============================================================
+function handleUrlParams() {
+  const params = new URLSearchParams(location.search);
+  const room = params.get('room');
+  if (room && /^[A-Z0-9]{4}$/.test(room)) {
+    // Auto-join
+    setTimeout(() => {
+      ensureDoc(room);
+      setView('lobby');
+    }, 100);
+  }
+}
+
+// ============================================================
+// STARTUP
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  render();
+  handleUrlParams();
+});
+
+// Re-render on hashchange (for back button)
+window.addEventListener('hashchange', () => {
+  render();
+});
+
+// Clean up on unload
+window.addEventListener('beforeunload', () => {
+  if (provider) { try { provider.destroy(); } catch(e){} }
+  if (doc) { try { doc.destroy(); } catch(e){} }
+});
+</script>
+</body>
+</html>
